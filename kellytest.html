@@ -23,14 +23,37 @@
 
       var border = 20;
 
+      var tileW = 4;
+      var tileH = 10;
+      var tileGap = 2;
+
+      var tileX = w/2 - tileW/2;
+      var tileY = 0;
+      var tileCount = h/(tileH + tileGap);
+
       function draw (){
-        ctx.clearRect(0,0,w,h);
+        ctx.clearRect(0, 0, w, h);
         ctx.fillStyle = "green";
-        ctx.fillRect(0,0,w,h);
+        ctx.fillRect(0, 0, w, h);
+
+        //paint themidline
+        ctx.fillStyle = "black";
+        for(var i = 0; i<tileCount; i++){
+          tileY = i * (tileH + tileGap);
+          ctx.fillRect(tileX, tileY, tileW, tileH);
+
+        }
+
 
         //paint the white walls
         ctx.fillStyle = "white";
-        ctx.fillRect(0,0,w,h,border);
+        //top
+        ctx.fillRect(0, 0, w, h, border);
+        //bottom
+        ctx.fillRect(0, h-border, w border);
+        //left wall
+        ctx.fillRect(0,0,border,h);
+        //right walls
       }
 
       draw ();

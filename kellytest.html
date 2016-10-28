@@ -45,8 +45,8 @@
       var ySpeedBall = 1;
 
       //ball direction
-      var xDirBall = 1;
-      var yDirBall = 1;
+      var xDirBall = -1;
+      var yDirBall = -1;
 
       function draw (){
         ctx.clearRect(0, 0, w, h);
@@ -82,6 +82,10 @@
         //change position of th eball
         xPosBall = xPosBall + xSpeedBall * xDirBall;
         yPosBall = yPosBall + ySpeedBall * yDirBall;
+
+        if(xPosBall <= border + radiusBall){
+          xDirBall = 1;
+        }
 
       }
 

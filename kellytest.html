@@ -54,7 +54,7 @@
 
       //size of the pad
       var padW = 12;
-      var padH = 30;
+      var padH = 60;
 
       //direction of the pad
       var padDir = 0;
@@ -108,7 +108,7 @@
         if(yPosBall >= h - border - radiusBall){
           yDirBall = -1;
         }
-        if(yPosBall >= yPosPad && yPosBall <= yPosPad + padH && xPosBall >= xPosPad){
+        if(yPosBall >= yPosPad && yPosBall <= yPosPad + padH && xPosBall >= xPosPad && xPosBall <= xPosPad + padW){
           xDirBall = -1;
 
         }

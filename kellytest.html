@@ -83,8 +83,17 @@
         xPosBall = xPosBall + xSpeedBall * xDirBall;
         yPosBall = yPosBall + ySpeedBall * yDirBall;
 
+
+        //does the ball hit the left wall?
         if(xPosBall <= border + radiusBall){
           xDirBall = 1;
+        }
+        //top
+        if(yPosBall <= border + radiusBall){
+          yDirBall = 1;
+        }
+        if(yPosBall >= h - border - radiusBall){
+          yDirBall = -1;
         }
 
       }

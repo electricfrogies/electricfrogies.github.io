@@ -59,6 +59,8 @@
       //direction of the pad
       var padDir = 0;
 
+      //speed of the pad
+      var padSpeed = 2;
 
       function draw (){
         ctx.clearRect(0, 0, w, h);
@@ -114,9 +116,22 @@
         }
         //draw pad
         ctx.fillStyle = "blue";
-        ctx.fillRect(xPosPad, yPosPad, padW, padH)
+        ctx.fillRect(xPosPad, yPosPad, padW, padH);
+        yPosPad = yPosPad + padSpeed * padDir;
       }
-
+      document.onkeydown = function(e){
+        if(e.keyCode == 38){
+          padDir = -1;
+        }
+        if(e.keyCode == 40){
+          padDir = 1;
+        }
+      }
+      document.onkeyup = function(e){
+        if(e.keyCode == 38 || keyCode == 40){
+          padDir = 0;
+        }
+      }
       setInterval(draw, gameSpeed);
 
   </script>

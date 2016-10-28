@@ -31,6 +31,12 @@
       var tileY = 0;
       var tileCount = h/(tileH + tileGap);
 
+      var radiusBall = 6;
+
+      //ball position
+      var xPosBall = 200;
+      var yPosBall = 300;
+
       function draw (){
         ctx.clearRect(0, 0, w, h);
         ctx.fillStyle = "green";
@@ -54,6 +60,13 @@
         //left wall
         ctx.fillRect(0,0,border,h);
         //right walls
+
+        //paint the ball
+        ctx.fillStyle = "yellow";
+        ctx.beginPath();
+        ctx.arc(xPosBall, yPosBall, radiusBall, 0, Math.PI * 2, false);
+        ctx.fill();
+        ctx.closePath();
       }
 
       draw ();

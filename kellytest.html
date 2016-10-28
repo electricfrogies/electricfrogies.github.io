@@ -53,7 +53,7 @@
       var yPosPad = h/2;
 
       //size of the pad
-      var padW = 6;
+      var padW = 12;
       var padH = 20;
 
       //direction of the pad
@@ -104,8 +104,13 @@
         if(yPosBall <= border + radiusBall){
           yDirBall = 1;
         }
+        //bottom
         if(yPosBall >= h - border - radiusBall){
           yDirBall = -1;
+        }
+        if(yPosBall >= yPosPad && yPosBall <= yPosPad + padH && xPosBall >= xPosPad){
+          xDirBall = -1;
+
         }
         //draw pad
         ctx.fillStyle = "blue";

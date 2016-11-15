@@ -7,9 +7,13 @@
 <body>
   <canvas id="canvas"></canvas>
   <script>
+
+	var gameWidth = 1500;
+	var gameHeight = 750;
+
     var canvas = document.getElementById("canvas");
     var processing = new Processing(canvas, function(processing) {
-        processing.size(400, 400);
+        processing.size(gameWidth, gameHeight);
         processing.background(0xFFF);
 
         var mouseIsPressed = false;
@@ -33,155 +37,370 @@
         };
 
         with (processing) {
-          var keys = [];
-          var gameScore = 0;
-          var level = 0;
+var GameWidth1 = 1500;
+var GameHeight1 = 750;
+var Score = 0;
+var Level = 0;
+var GameTimer = 1000;
+var GameOver = false;
+var deathByEnemy = false;
+var deathByTimer = false;
+var YouWin = true;
+var Lifes = 3;
+var keys = [];
 
-          keyPressed = function(){
-              keys[keyCode] = true;
-          };
-          keyReleased = function(){
-              keys[keyCode] = false;
-          };
+var keyPressed = function() {
+    keys[keyCode] = true;
+};
 
-          //Player Constructor
-          var Player = function(x,y,size, speed){
-            this.x = x;
-            this.y = y;
-            this.size = size;
-            this.speed = speed;
-          };
+var keyReleased = function() {
+    keys[keyCode] = false;
+};
 
-
-          //Player update method
-          Player.prototype.update = function(){
-              fill(199, 133, 199);
-              ellipse(this.x, this.y, this.size, this.size);
-              if(keyIsPressed && keys[UP]){
-                  this.y -= this.speed;
-              }
-              if(keyIsPressed && keys[DOWN]){
-                  this.y += this.speed;
-              }
-              if(keyIsPressed && keys[RIGHT]){
-                  this.x += this.speed;
-              }
-              if(keyIsPressed && keys[LEFT]){
-                  this.x -= this.speed;
-              }
-              if(this.x < 10){
-                  this.x = 10;
-              }
-              if(this.x > 390){
-                  this.x =390;
-              }
-              if(this.y<10){
-                  this.y = 10;
-              }
-              if(this.y > 390){
-                  this.y = 390;
-              }
-          };
-
-          //Player instance
-          var player1 = new Player (200,200,30,2);
-
-          //Dot constructor
-          var Dot = function(x,y,size,speed, blueDot){
-              this.x = x;
-              this.y = y;
-              this.xVel = random(-speed,speed);
-              this.yVel = random(-speed, speed);
-              this.size = size;
-              this.speed = speed;
-              this.blueDot = blueDot;
-          };
-
-          //Dot update method
-          Dot.prototype.update = function(purpleDot){
-              fill(85, 116, 207);
-              ellipse(this.x, this.y, this.size, this.size);
-              if(this.x < purpleDot.x){
-                  this.xVel = this.xVel - 0.05 * level ;
-              }
-              if(this.x > purpleDot.x){
-                  this.xVel = this.xVel + 0.05 * level ;
-              }
-              if(this.x < 0 || this.x > 400 || this.y < 0 || this.y > 400){
-                  //something went wrong- lost dots
-                  this.x = 10;
-                  this.y = 10;
-              }
-              this.x += this.xVel;
-              this.y += this.yVel;
-              if(this.x < 10 || this.x > 390){
-               this.xVel = -this.xVel;
-              }
-              if(this.y < 10 || this.y > 390){
-               this.yVel = -this.yVel;
-              }
-          };
-
-          //Dot instances
-          var allTheDots = [];
-          for(var i = 0; i< 10; i++){
-              allTheDots.push (new Dot (random(10,390),
-                                        random(10,390),
-                                        20,
-                                        random(1,2)
-                                        )
-                              );
-          }
-          //create variable
-          //for loop to run through array
-          //distance variable
-          //compare distance to sum of radius
-          //splice array (i,1)
-
-          var checkForCollisions = function(){
-               for(var i = 0; i< allTheDots.length; i++){
-                var distance = dist(player1.x, player1.y, allTheDots[i].x, allTheDots[i].y);
-                   if(distance <= player1.size/2 + allTheDots[i].size/2){
-                   allTheDots.splice(i,1);
-                    gameScore ++;
-               }
-               if(distance < 100){
-                  allTheDots[i].size = allTheDots[i].size * 0.99;
-
-                  //prevent it from getting too big
-                  if(allTheDots[i].size < 10){
-                      allTheDots[i].size = 10;
-                  }
-               }
+var Player = function(x, y, speed, size) {
+    this.x = x;
+    this.y = y;
+    this.size = size;
+    this.speed = speed;
+    this.update = function() {
+        if (keys[87] || keys[UP]){      //moves the dot up
+            this.y = this.y - this.speed;
+            if (this.y < 15) {
+                this.y = 15;
             }
-          };
-
-
-
-          draw = function() {
-              background(0,0,0);
-              player1.update();
-              for(var i in allTheDots){
-               allTheDots[i].update(player1);
-              }
-            checkForCollisions(player1,allTheDots);
-            if(allTheDots.length === 0){
-                for(var i = 0; i< 10; i++){
-                          allTheDots.push (new Dot (random(10,390),
-                                        random(10,390),
-                                        20,
-                                        random(1,2)
-                                        )
-                              );
-              }
-          level = level +1;
+        }
+        if (keys[83] || keys[DOWN]){    //moves the dot down
+            this.y = this.y + this.speed;
+            if (this.y > GameHeight1 - 20) {
+                this.y = GameHeight1 - 20;
             }
-            text("score: " + gameScore + "    Level: " + level, 50, 50);
+        }
+        if (keys[65] || keys[LEFT]){    //moves the dot left
+            this.x = this.x - this.speed;
+            if (this.x < 10) {
+                this.x = 10;
+            }
+        }
+        if (keys[68] || keys[RIGHT]){   //moves the dot right
+            this.x = this.x + this.speed;
+            if (this.x > GameWidth1 - 20) {
+                this.x = GameWidth1 - 20;
+            }
+        }
+
+        fill(0, 232, 23);
+        noStroke();
+        //ellipse(this.x, this.y, this.size, this.size);
+        image(getImage("avatars/mr-pink-green"), this.x - 19, this.y - 20, 50, 50);
+        fill(0, 51, 255);
+        //text("Player", this.x - 15, this.y + 2);
+    };
+};
+
+var Dot = function(x, y, speed, size) {
+    this.x = x;
+    this.y = y;
+    this.speed = speed;
+    this.size = size;
+    this.xVel = random(-speed, speed);
+    this.yVel = random(-speed, speed);
+    this.update = function(GreenDot) {
+        if (this.x < GreenDot.x) {
+            // the red dot is to the left of the green dot
+            this.xVel = this.xVel - 0.07 *  Level;
+        }
+        if (this.x > GreenDot.x) {
+            // the red dot is to the left of the green dot
+            this.xVel = this.xVel + 0.07 *  Level;
+        }
+        if (this.y < GreenDot.y) {
+            // the red dot is to the left of the green dot
+            this.yVel = this.yVel - 0.07 *  Level;
+        }
+        if (this.y > GreenDot.y) {
+            // the red dot is to the left of the green dot
+            this.yVel = this.yVel - 0.07 *  Level;
+        }
+
+        // make the dots move
+        this.x = this.x + this.xVel;
+        if (this.x < 10 || this.x > GameWidth1 - 10) {
+            this.xVel = -this.xVel;
+        }
+        this.y = this.y + this.yVel;
+        if (this.y < 10 || this.y > GameHeight1 - 10) {
+            this.yVel = - this.yVel;
+        }
+
+        if (this.x < -8 || this.x > GameWidth1 + 10 || this.y < -8 || this.y > GameHeight1 + 10){
+            //ball goes out the place
+            this.x = random(10, GameWidth1 - 10);
+            this.y = random(10, GameHeight1 - 10);
+            this.xVel = 3;
+            this.yVel = 3;
+        }
+        //draw the dot
+        image(getImage("avatars/leafers-seed"), this.x, this.y, 50, 50);
+    };
+};
+
+var BonusDots = function(x, y, speed, size, visible) {
+    this.x = x;
+    this.y = y;
+    this.speed = speed;
+    this.size = size;
+    this.xVel = random(-speed, speed);
+    this.yVel = random(-speed, speed);
+    this.visible = visible;
+    this.update = function(GreenDot) {
+        // make the dots move
+        this.x = this.x + this.xVel;
+        if (this.x < 10 || this.x > GameWidth1 - 10) {
+            this.xVel = -this.xVel;
+        }
+        this.y = this.y + this.yVel;
+        if (this.y < 10 || this.y > GameHeight1 - 10) {
+            this.yVel = - this.yVel;
+        }
+
+        if (this.x < -8 || this.x > GameWidth1 + 10 || this.y < -8 || this.y > GameHeight1 + 10){
+            //ball goes out the place
+            this.x = random(0, GameWidth1 - 10);
+            this.y = random(0, GameHeight1 - 10);
+            this.xVel = 2;
+            this.yVel = 2;
+
+        }
+        if (this.visible === true){
+        //draw the dot
+        image(getImage("avatars/spunky-sam-red"), this.x - 20, this.y - 26, 45, 45);
+        }
+
+    };
+}; // â–²â–²â–²â–²â–²â–²â–²â–²â–² Bonus â–²â–²â–²â–²â–²â–²â–²â–²â–²
+
+var EnemyDots = function(x, y, speed, size, visible) {
+    this.x = x;
+    this.y = y;
+    this.speed = speed;
+    this.size = size;
+    this.xVel = random(-speed, speed);
+    this.yVel = random(-speed, speed);
+    this.visible = visible;
+    this.update = function(GreenDot) {
+        // make the dots move
+        this.x = this.x + this.xVel;
+        if (this.x < 10 || this.x > GameWidth1 - 10) {
+            this.xVel = -this.xVel;
+        }
+        this.y = this.y + this.yVel;
+        if (this.y < 10 || this.y > GameHeight1 - 10) {
+            this.yVel = - this.yVel;
+        }
+
+        if (this.x < -8 || this.x > GameWidth1 + 10 || this.y < -8 || this.y > GameHeight1 + 10){
+            //ball goes out the place
+            this.x = random(0, GameWidth1 - 10);
+            this.y = random(0, GameHeight1 - 10);
+            this.xVel = 2;
+            this.yVel = 2;
+
+        }
+        if (this.visible === true){
+        //draw the dot
+        image(getImage("avatars/starky-seed"), this.x - 29, this.y - 35, 65, 65);
+        }
+
+    };
+}; // â–²â–²â–²â–²â–²â–²â–²â–²â–² Enemy â–²â–²â–²â–²â–²â–²â–²â–²â–²
+
+var bonusdots = [];
+
+var enemydots = [];
+
+var dots = [];
+
+var player = new Player(100, 176, 7, 45);
+
+var checkForCollisions = function(player, dots) {
+    for (var i = 0; i < dots.length; i++) {
+        var distance = dist(player.x, player.y, dots[i].x, dots[i].y);
+
+        if (distance < 100) {
+            dots[i].size = dots[i].size * 0.99;
+            if (dots[i].size < 35) {
+                dots[i].size = 35;
+            }
+        }
+        else {
+            dots[i].size = dots[i].size * 1.0002;
+            if (dots[i].size > player.size) {
+                dots[i].size = player.size;
+            }
+        }
+
+        if (distance <= (player.size / 2 + dots[i].size / 2)) {
+        // If red dot is eaten then +1 score
+        dots.splice(i, 1);
+        Score = Score + 1;
+        }
+    }
+
+        //If the bonus dot is eaten then set score *refer to score =*
+for (var b = 0; b < bonusdots.length; b++) {
+        var distance = dist(player.x, player.y, bonusdots[b].x, bonusdots[b].y);
+        if (distance <= (player.size / 2 + bonusdots[b].size / 2)) {
+        bonusdots.splice(b, 1);
+        Score = round(Score + 5 * Level + Score * 0.5);
+    }
+}
+
+//If the enemy dot is eaten then remove 1 life
+for (var e = 0; e < enemydots.length; e++) {
+    var distance = dist(player.x, player.y, enemydots[e].x, enemydots[e].y);
+        if (distance <= (player.size / 2 + enemydots[e].size / 2)) {
+            enemydots.splice(e, 1);
+            Lifes--;
+        }
+}
+};
 
 
-          };
+var draw = function() {
+    background(143, 136, 143);
+    player.update();
 
-            // INSERT YOUR KHAN ACADEMY PROGRAM HERE
+    //â–²â–²â–²â–²â–²â–²â–²â–²â–² Creation of the dots after game â–²â–²â–²â–²â–²â–²â–²â–²â–²
+
+    for (var i = 0; i < dots.length; i++){
+        dots[i].update(player);
+    }
+
+    for (var e = 0; e < enemydots.length; e++){
+        enemydots[e].update(player);
+    }
+
+    for (var b = 0; b < bonusdots.length; b++) {
+        bonusdots[b].update(player);
+    }
+
+    textSize(12);
+    checkForCollisions(player, dots);
+    fill(252, 252, 252);
+    text("Score: " + Score + "      Level: " + Level, 14, 20);
+    if  (dots.length === 0) {
+        // the level is cleared. Create more dots, increase level by 1
+    for (var i =0; i < 10; i++){
+            dots[i] = new Dot(random(0, GameWidth1), random(0, GameHeight1), random(0, 2), 20);
+            GameTimer = 1500;
+
+    }
+    for (var e = 0; e < 1 * Level; e++){
+        enemydots[e] = new EnemyDots(random(0, GameWidth1), random(0, GameHeight1), random(1, 5), 20, true);
+    }
+
+    for (var b = 0; b < Level - random (0, 5); b++){
+        bonusdots[b] = new BonusDots(random(0, GameWidth1), random(0, GameHeight1), random(1, 5), 20, true);
+    }
+
+    Level = Level + 1;
+
+    } //End of last for
+
+    // â–²â–²â–²â–²â–²â–²â–²â–²â–² Lives â–²â–²â–²â–²â–²â–²â–²â–²â–²
+    text("Lifes: " + Lifes, 140, 20);
+	textSize(20);
+	fill(93, 232, 218);
+	text("Dot Boogie By: JJ Jones", 350, 23);
+
+    // â–²â–²â–²â–²â–²â–²â–²â–²â–² Timer â–²â–²â–²â–²â–²â–²â–²â–²â–²
+    textSize(12);
+    GameTimer--;
+    noFill();
+    stroke(0, 0, 0);
+    rect(190, 5, 150, 21);
+    fill(250, 250, 250);
+    rect(190, 5, GameTimer/ 10, 21);
+    fill(0, 0, 0);
+    text("Timer: " + round(GameTimer/100), 200, 20);
+    textSize(12);
+
+    // â–²â–²â–²â–²â–²â–²â–²â–²â–² Game Over â–²â–²â–²â–²â–²â–²â–²â–²â–²
+    if (Score < 0 || Lifes === 0 || GameTimer === 0){
+            GameOver = true;
+    }
+    if (Lifes === 0){
+        deathByEnemy = true;
+        GameOver = true;
+    }
+    if (GameTimer === 0){
+        deathByTimer = true;
+        GameOver = true;
+    }
+
+    if (GameOver === true && deathByEnemy === true){
+        background(0, 0, 0);
+        fill(43, 255, 0);
+        textSize(39);
+        text("Game Over", 650, 400);
+        textSize(20);
+        text("Cause of Death: No Lifes Left", 500, 600);
+        textSize(17);
+        fill(43, 255, 0);
+        text("Score: " + Score + "       "  + "Level:   " + Level, GameWidth - 100, 299);
+        image(getImage("avatars/mr-pink-green"), 725, 60, 200, 200);
+        noLoop(); // â–²â–²â–²â–²â–²â–²â–²â–²â–² Stops the Game â–²â–²â–²â–²â–²â–²â–²â–²â–²
+
+    }
+
+    if (GameOver === true && deathByTimer === true){
+        background(0, 0, 0);
+        fill(255, 0, 0);
+        textSize(60);
+        text("Game Over", 650, 400);
+        textSize(50);
+        text("Cause of Death: No Time Left", 500, 600);
+        textSize(60);
+        fill(43, 255, 0);
+        text("Score: " + Score + "       "  + "Level:   " + Level, 500, 800);
+		text("", 300, 360);
+        image(getImage("avatars/mr-pink-green"), 725, 60, 200, 200);
+        noLoop(); // â–²â–²â–²â–²â–²â–²â–²â–²â–² Stops the Game â–²â–²â–²â–²â–²â–²â–²â–²â–²
+
+    }
+
+    // â–²â–²â–²â–²â–²â–²â–²â–²â–² You Win â–²â–²â–²â–²â–²â–²â–²â–²â–²
+    if (Score > 300 || Level === 15){
+            YouWin = true;
+        if (YouWin === true){
+            background(0, 0, 0);
+            fill(255, 0, 0);
+            textSize(39);
+            text("You Win", 123, 200);
+            textSize(17);
+            fill(43, 255, 0);
+            text("Score: " + Score + "       "  + "Level:   " + Level, 109, 299);
+            image(getImage("avatars/mr-pink-green"), 139, 30, 100, 100);
+            noLoop(); // â–²â–²â–²â–²â–²â–²â–²â–²â–² Stops the Game â–²â–²â–²â–²â–²â–²â–²â–²â–²
+
+    }
+    }
+
+    //if (YouWin === true && mouseIsPressed){
+    //    YouWin = false;
+    //    Score = 0;
+    //    Level = 0;
+    //}
+
+}; //End of draw statement
+
+
+
+
+
+
+
+
 
 
         }

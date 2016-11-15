@@ -33,148 +33,168 @@
         };
 
         with (processing) {
-          var gameScore = 0;
-          var gameLevel = 0;
-          var buildings = [];
-          var keys = [];
-          keyPressed = function(){
-            keys[keyCode] = true;
-          };
-          keyReleased = function(){
-            delete keys[keyCode];
-          };
+          noStroke();
+  var xPos = 100;
+  var yPos = 100;
+  var spacing = 5;
 
-          var airPlane = function(x,y,w,h,speed){
-            this.x = x;
-            this.y = y;
-            this.w = w;
-            this.h = h;
-            this.speed = speed;
-          };
-          airPlane.prototype.draw = function() {
-              image(getImage("space/octopus"),this.x, this.y, this.w, this.h);
-          };
-          airPlane.prototype.move = function(){
-            this.x += this.speed;
-            if(this.x > width){
-             this.x = 0;
-             this.y += this.h/2;
-            }
-          };
-          var player = new airPlane(10,10,70,60,2);
+  var sign = function(){
+      fill(247, 155, 42);
+      ellipse(xPos, yPos, 5,5);
 
-          var Bomb = function(x,y,xVel,yVel,w,h,accel){
-            this.x = x;
-            this.y = y;
-            this.xVel = xVel;
-            this.yVel = yVel;
-            this.w = w;
-            this.h = h;
-            this.accel = accel;
-          };
-          Bomb.prototype.draw = function() {
-               fill(0, 145, 255);
-               noStroke();
-               ellipse(this.x, this.y, this.w, this.h);
-          };
-          Bomb.prototype.drop = function(){
-              this.x += this.xVel;
-              this.y += this.yVel;
-              this.yVel += this.accel;
-              if(this.x > width){
-               this.x = 0;
-              }
-          };
-          var bomb = new Bomb (100,height + 10, 2, 0, 20,10, 0.2);
-          var dropBomb = function(bomb,player){
-            bomb.x = player.x + player.w/2;
-            bomb.y = player.y + player.h;
-            bomb.xVel = player.speed;
-            bomb.yVel = 0;
-            bomb.accel = 0.2;
-            gameScore --;
-          };
+      if(xPos <= 300 && yPos === 100 ){
+       xPos= xPos + spacing;
+      }
+      if(yPos < 300 && xPos === 300){
+       yPos = yPos + spacing;
+      }
+      if(yPos === 300 && xPos >= 100){
+       xPos = xPos - spacing;
+      }
+      if(xPos === 100 && yPos > 100){
+       yPos = yPos - spacing;
+      }
+  };
 
-          var Building = function(x,y,w,h,color){
-            this.x = x;
-            this.y = y;
-            this.w = w;
-            this.h = h;
-            this.color = color;
-          };
-          Building.prototype.draw = function() {
-              fill(this.color);
-              rect(this.x, this.y, this.w, this.h);
-          };
-          Building.prototype.shrink = function(){
-            this.h -= 20;
-          };
-          var hitBox = function(a,b){
-              return(a.x <= b.x + b.w &&
-                     b.x <= a.x + a.w &&
-                     a.y <= b.y + b.h &&
-                     b.y <= a.y + a.h);
-          };
+  //clouds constructor function
+  var clouds = function(x, y, w, h, color){
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.h = h;
+    this.color = color;
+  };
+  //cloud draw method
+  clouds.prototype.draw = function() {
+      fill(this.color);
+      ellipse(this.x,this.y,this.w, this.h);
+  };
+  //clouds move method
+  clouds.prototype.move = function(){
+      if(this.x<450){
+       this.x= this.x+0.5;
+      }
+      if(this.x>=450){
+       this.x = 0;
+      }
+  };
+  //create array and push cloud instances into
+  var allTheClouds = [];
+  for(var i = 0; i<4; i++){
+      allTheClouds.push(new clouds (random(143,400),
+                                    random(30,90),
+                                    random(190,242),
+                                    random(5,15),
+                                    color(102, 97, 97, 120)
+                                    )
+                      );
 
-          var checkforCollisons = function(bomb, Building){
-            for(var i in buildings){
-              if(hitBox(bomb,buildings[i])){
-                  //move bomb off screen
-               bomb.y = height + 100;
-               fill(255, 0, 0);
-               ellipse(bomb.x, bomb.y, bomb.w*2, bomb.h*2);
-               buildings[i].h = buildings[i].h - 30;
-               buildings[i].y = buildings[i].y + 30;
+  }
 
-               //check to see if building destroyed
-               if(buildings[i].h < 0){
-                gameScore += 10;
-               }
-              }
-            }
-          };
+  //pumpkin constructor function
+  var pumpkin = function(x,y,w,h,color1,color2){
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.h = h;
+    this.color1 = color1;
+    this.color2 = color2;
+  };
 
-          var buildBuildings = function(){
-            gameLevel ++;
-            player.xVel = gameLevel;
+  //pumpkin draw method
+  pumpkin.prototype.draw = function() {
+       noStroke();
+      fill(this.color1);
+      rect(this.x*1.14, this.y*0.96, this.w/8, this.h/7);
+      stroke(224, 113, 29);
+      fill(this.color2);
+      rect(this.x, this.y, this.w, this.h, 30);
+      noStroke();
+  };
+  //create array and push new pumpkins into array
+  var allThePumpkins = [];
+  for(var i = 0; i < 2; i++){
+      allThePumpkins.push(new pumpkin(random(148,317),
+                                      random(292, 335),
+                                      random(70,90),
+                                      random(80,100),
+                                      color(42, 135, 34),
+                                      color(random(230,250), 162, 32)
+                                      )
+                          );
+  }
+  //constructor function
+  var fallLeaf = function(x,y,color, speed){
+      this.x=x;
+      this.y=y;
+      this.color=color;
+      this.speed=speed;
+  };
+  //draw method
+  fallLeaf.prototype.draw = function() {
+      fill(this.color);
+      ellipse(this.x, this.y, 34, 14);
+  };
+  //drop method
+  fallLeaf.prototype.drop = function(){
+      if(this.y<250){
+          this.y= this.y+this.speed;
+          this.x= this.x+this.speed/4;
+      }
+      if(this.y>=250 && this.y<300){
+          this.y= this.y+this.speed;
+          this.x= this.x-this.speed/4;
+      }
+      if(this.y>=300 && this.y<365){
+          this.y= this.y+this.speed;
+          this.x= this.x+this.speed/4;
+      }
+  };
+  //create array & push new instances into array
+  var allTheLeaves = [];
+  for(var i = 0; i <208; i++){
+      allTheLeaves.push(new fallLeaf(random(0,151),
+                                    random(0,175),
+                                    color(random(200,255),random(35,110),0),
+                                    0.005
+                                    )
+                      );
+  }
+  //draw function
 
-            var numberofBuildings = gameLevel;
-            if(numberofBuildings > 5){
-              numberofBuildings = 5;
-            }
-            for(var i = 0; i < numberofBuildings; i++){
-              var w = 100 - gameLevel * 10;
-                  if(w < 20){
-                       w = 20;
-                          }
-              var x = random(5, width - w);
-              var y = random(200,350);
-
-            buildings[i] = new Building(x,y,w,height - y,color(random(0,255),random(0,255),random(0,255)));
-
-            }
-
-
-          };
-
-          buildBuildings();
-          player.y = 10;
-          draw = function() {
-              background(61, 187, 209);
-              player.draw();
-              player.move();
-              bomb.draw();
-              bomb.drop();
-              if(keys[DOWN] && bomb.y > height){
-               dropBomb(bomb,player,gameScore);
-              }
-             for(var i in buildings){
-              buildings[i].draw();
-             }
-             checkforCollisons (bomb,Building);
-             fill(255, 0, 0);
-             text("Score: " + gameScore, 20,46);
-          };
+  draw = function() {
+          noStroke();
+          background(16, 67, 84);
+          //moon
+          fill(230, 255, 5);
+          ellipse(334, 66, 100,100);
+          fill(102, 51, 0);
+           rect(0, 0, 65, 400);
+           triangle(65, 380, 65, 400, 80, 400);
+          for(var i in allTheClouds){
+           allTheClouds[i].draw();
+           allTheClouds[i].move();
+          }
+          for(var i in allThePumpkins){
+           allThePumpkins[i].draw();
+          }
+          for(var i in allTheLeaves){
+           allTheLeaves[i].draw();
+           allTheLeaves[1].drop();
+           allTheLeaves[2].drop();
+           allTheLeaves[3].drop();
+           allTheLeaves[4].drop();
+       }
+       //grass
+       for(var i=0; i<403; i+=4){
+      stroke(0, 153, 51);
+      strokeWeight(3);
+      noFill();
+      bezier(i,400,i-10, 380, i+10, 380, i, 370);
+      stroke(0, 77, 26);
+      bezier(i+5,400,i-4, 375, i+8, 375, i+3, 370);
+       }
+  };
 
             // INSERT YOUR KHAN ACADEMY PROGRAM HERE
 

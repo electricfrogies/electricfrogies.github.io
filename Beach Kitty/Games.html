@@ -1,5 +1,170 @@
+<!DOCTYPE html>
 <html>
-body{
-  background-color:green
- }
-<html>
+<head>
+  <title>JavaScript</title>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/processing.js/1.4.8/processing.min.js"></script>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  <script>
+    var canvas = document.getElementById("canvas");
+    var processing = new Processing(canvas, function(processing) {
+        processing.size(400, 400);
+        processing.background(0xFFF);
+
+        var mouseIsPressed = false;
+        processing.mousePressed = function () { mouseIsPressed = true; };
+        processing.mouseReleased = function () { mouseIsPressed = false; };
+
+        var keyIsPressed = false;
+        processing.keyPressed = function () { keyIsPressed = true; };
+        processing.keyReleased = function () { keyIsPressed = false; };
+
+        function getImage(s) {
+            var url = "https://www.kasandbox.org/programming-images/" + s + ".png";
+            processing.externals.sketch.imageCache.add(url);
+            return processing.loadImage(url);
+        }
+
+        // use degrees rather than radians in rotate function
+        var rotateFn = processing.rotate;
+        processing.rotate = function (angle) {
+            rotateFn(processing.radians(angle));
+        };
+
+        with (processing) {
+
+
+            // INSERT YOUR KHAN ACADEMY PROGRAM HERE
+            var redScore=0;
+var blueScore=0;
+
+var Paddle1 =function(x,y,w,h,color,speed){
+    this.x=x;
+    this.y=y;
+    this.w=w;
+    this.h=h;
+    this.color=color;
+    this.speed=speed;
+    this.update=function(){
+        if(keyPressed&&keyCode===UP){
+            this.y-=this.speed;
+        }
+        if(keyPressed&&keyCode===DOWN){
+            this.y+=this.speed;
+        }
+        if(this.y<10){
+            this.y=10;
+        }
+        if(this.y>290){
+            this.y=290;
+        }
+        fill(this.color);
+        rect(this.x,this.y,this.w,this.h);
+    };
+
+};
+var Paddle2 =function(x,y,w,h,color,speed){
+    this.x=x;
+    this.y=y;
+    this.w=w;
+    this.h=h;
+    this.color=color;
+    this.speed=speed;
+    this.update=function(){
+        if(keyPressed&&keyCode===87){
+            this.y-=this.speed;
+        }
+        if(keyPressed&&keyCode===83){
+            this.y+=this.speed;
+        }
+        if(this.y<10){
+            this.y=10;
+        }
+        if(this.y>290){
+            this.y=290;
+        }
+        
+        fill(this.color);
+        rect(this.x,this.y,this.w,this.h);
+    };
+
+};
+var player1= new Paddle1(350,100,50,100,color(0, 0, 255),2);
+var player2= new Paddle2(0,100,50,100,color(255, 0, 0),2);
+var Points=[player1.x,player1.y+player1.h/2,player2.x,player2.y+player2.h/2];
+
+
+    
+var Ball = function(x,y,w,h,xVel,yVel){
+    this.x=x;
+    this.y=y;
+    this.w=w;
+    this.h=h;
+    this.xVel=xVel;
+    this.yVel=yVel;
+    this.update=function(){
+        this.x+=this.xVel;
+        this.y+=this.yVel;
+        if(this.y<10||this.y>390){
+            this.yVel=-this.yVel;
+        }
+        if(this.x>400){
+            redScore++;
+            this.x=200;
+        }
+        if(this.x<0){
+            blueScore++;
+            this.x=200;
+        }
+        fill(255, 0, 255);
+        ellipse(this.x,this.y,this.w,this.h);
+    };
+};
+var pongBall = new Ball(0,200,20,20,2,random(0,2));
+
+
+var hitBox=function(a,b){
+  return(a.x <= b.x + b.w &&
+         b.x <= a.x + a.w &&
+         a.y <= b.y + b.h &&
+         b.y <= a.y + a.h);
+};
+
+var CheckPaddle1=function(pongBall,Paddle1){
+    if(hitBox(pongBall,player1)){
+        pongBall.xVel = -pongBall.xVel;
+ 
+        
+    }
+   
+};
+var CheckPaddle2=function(pongBall,Paddle2){
+    if(hitBox(pongBall,player2)){
+        pongBall.xVel = -pongBall.xVel;
+    }
+};
+
+var draw= function() {
+    background(255,255,255);
+    noStroke();
+    player1.update();
+    player2.update();
+    pongBall.update();
+    CheckPaddle1(pongBall,Paddle1);
+    CheckPaddle2(pongBall,Paddle2);
+    stroke(0,0,0);
+    strokeWeight(20);
+    line(200,0,200,400);
+    fill(0,0,0);
+    text("Red's Score: "+redScore,20,20);
+    text("Blue's Score: "+blueScore,20,40);
+};
+
+
+        }
+        if (typeof draw !== 'undefined') processing.draw = draw;
+    });
+  </script>
+</body>
+</html>

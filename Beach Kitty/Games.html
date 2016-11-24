@@ -109,7 +109,7 @@ var Ball = function(x,y,w,h,xVel,yVel){
         if(this.y<10||this.y>390){
             this.yVel=-this.yVel;
         }
-        if(this.x>400){
+        if(this.x>width){
             redScore++;
             this.x=200;
         }
@@ -155,7 +155,7 @@ var draw= function() {
     CheckPaddle2(pongBall,Paddle2);
     stroke(0,0,0);
     strokeWeight(20);
-    line(200,0,200,400);
+    line(200,0,200,height);
     fill(0,0,0);
     text("Red's Score: "+redScore,20,20);
     text("Blue's Score: "+blueScore,20,40);

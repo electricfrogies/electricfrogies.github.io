@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>JavaScript</title>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/processing.js/1.4.8/processing.min.js"></script>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  <script>
+    var canvas = document.getElementById("canvas");
+    var processing = new Processing(canvas, function(processing) {
+        processing.size(400, 400);
+        processing.background(0xFFF);
+
+        var mouseIsPressed = false;
+        processing.mousePressed = function () { mouseIsPressed = true; };
+        processing.mouseReleased = function () { mouseIsPressed = false; };
+
+        var keyIsPressed = false;
+        processing.keyPressed = function () { keyIsPressed = true; };
+        processing.keyReleased = function () { keyIsPressed = false; };
+
+        function getImage(s) {
+            var url = "https://www.kasandbox.org/programming-images/" + s + ".png";
+            processing.externals.sketch.imageCache.add(url);
+            return processing.loadImage(url);
+        }
+
+        // use degrees rather than radians in rotate function
+        var rotateFn = processing.rotate;
+        processing.rotate = function (angle) {
+            rotateFn(processing.radians(angle));
+        };
+
+        with (processing) {
+
+
+            // INSERT YOUR KHAN ACADEMY PROGRAM HERE
+var y = 10;
+//Snow array
+var xPositions = [200, 225, 125, 375, 150, 280, 317, 350, 50, 55, 225, 250, 150, 100, 123, 210, 111, 222, 333, 141, 22, 132, 281, 569, 284, 600, 500, 520, 400, 580, 540, 440, 421, 452];
+var yPositions = [200, 100, 250, 300, 120, 360, 390, 20, 80, 130, 300, 320, 25,  60, 100, 235, 288, 10, 15,20, 21, 45, 15, 300, 345, 360, 311, 380, 20, 300, 400, 200, 28, 68];
+
+var armSpeed = 2;
+var armX = 350;
+var caboose = function(x, y, speed, message, Tcolor){
+    this.x = x;
+    this.y = y;
+    this.speed = speed;
+    this.message = message;
+    this.Tcolor = Tcolor;
+};
+var trainCar = function(x, y, speed, message, Tcolor){
+    this.x = x;
+    this.y = y;
+    this.speed = speed;
+    this.message = message;
+    this.Tcolor = Tcolor;
+};
+var frontTrainCar = function(x, y, speed, wheelY, wheelSpeed){
+    this.x = x;
+    this.y = y;
+    this.speed = speed;
+    this.wheelSpeed = wheelSpeed;
+    this.wheelY = wheelY;
+};
+var tracks = function(){
+    noStroke();
+    for(var i = 0; i< 600; i+=25){
+        fill(186, 149, 0);
+        rect(i, 227, 20, 103);
+    }
+    fill(65, 65, 65);
+    rect(0, 240, 600, 5);
+    rect(0, 315, 600, 5);
+};
+var snowman = function(){
+    strokeWeight(1);
+    fill(255, 255, 255);
+    stroke(0, 0, 0);
+    ellipse(400, 168, 70, 70);
+    ellipse(400, 127, 45, 45);
+    ellipse(400, 98, 30, 30);
+    noStroke();
+    fill(255, 134, 54);
+    triangle(402, 97, 395, 97, 398, 101);
+    stroke(0, 0, 0);
+    strokeWeight(3);
+    point(394, 92);
+    point(404, 92);
+    point(405, 102);
+    point(398, 106);
+    point(390, 103);
+    line(390, 125, 355, 111);
+    line(417, 125, 439, 181);
+    line(353, 109, armX, 73);
+    armX+=armSpeed;
+    if(armX >360 || armX < 340){
+        armSpeed = -armSpeed;
+    }
+};
+trainCar.prototype.draw = function(){
+    fill(0, 0, 0);
+     rect(this.x+271, this.y+125, 50, 20);
+    fill(this.Tcolor);
+    noStroke();
+    rect(this.x, this.y, 275, 150);
+   fill(255, 191, 0);
+   text(this.message, this.x+75, this.y+75);
+fill(255, 191, 0);
+    noStroke();
+   
+    ellipse(this.x+50, this.y+150, 75, 75);
+    ellipse(this.x+150, this.y+150, 75, 75);
+    ellipse(this.x+250, this.y+150, 75, 75);
+    
+     fill(69, 67, 63);
+    
+    ellipse(this.x+50, this.y+150, 70, 70);
+    ellipse(this.x+150, this.y+150, 70, 70);
+    ellipse(this.x+250, this.y+150, 70, 70);
+ 
+
+};
+trainCar.prototype.move = function(){
+    this.x = this.x+this.speed;
+    if(this.x > 4000){
+    this.x = -1000;
+    }
+
+};
+frontTrainCar.prototype.draw = function() {
+    rectMode(CENTER);
+    fill(48, 48, 48);
+    arc(this.x, this.y, 250, 261, -179, 0);
+    rect(this.x-197, this.y-75, 332, 149);
+    fill(89, 89, 89);
+    rect(this.x, this.y-169, 20, 80);
+    noFill();
+    stroke(0, 0, 0);
+    arc(this.x+6, this.y-240, 30, 45, -99, 65);
+   arc(this.x, this.y-260, 30, 47, 127, 268);
+    fill(255, 191, 0);
+    noStroke();
+    ellipse(this.x, this.y, 75, 75);
+    ellipse(this.x-75, this.y, 75, 75);
+    ellipse(this.x-75-75, this.y, 75, 75);
+    ellipse(this.x-75-75-75, this.y, 75, 75);
+    ellipse(this.x-75-75-75-75, this.y, 75, 75);
+     fill(69, 67, 63);
+     ellipse(this.x, this.y, 70, 70);
+    ellipse(this.x-75, this.y, 70, 70);
+    ellipse(this.x-75-75, this.y, 70, 70);
+    ellipse(this.x-75-75-75, this.y, 70, 70);
+    ellipse(this.x-75-75-75-75, this.y, 70, 70);
+    fill(255, 191, 0);
+    rectMode(LEFT);
+    rect(this.x-75-75-75-75, this.wheelY,300, 10);
+    textSize(40);
+    text("Polar Express", this.x-325, this.y-80);
+};
+frontTrainCar.prototype.move = function(){
+    this.x = this.x+this.speed;
+    if(this.x > 4000){
+        this.x = -1000;
+    }
+this.wheelY = this.wheelY+=this.wheelSpeed;
+if(this.wheelY> this.y+30){
+    this.wheelSpeed = -this.wheelSpeed;
+}else if(this.wheelY < this.y-30){
+    this.wheelSpeed = -this.wheelSpeed;
+}
+
+};
+caboose.prototype.draw = function(){
+    fill(70, 70, 70);
+    rect(this.x+270, this.y+125, 50, 20);
+    rect(this.x+-60, this.y+150, 40, 20);
+    rect(this.x+-65, this.y+140, 50, 20);
+  
+   fill(50, 50, 50);
+    rect(this.x-75,this.y+140, 100, 10);
+     stroke(0, 0, 0);
+    line(this.x+-62, this.y+160, this.x+-18, this.y+160);
+    noStroke();
+    fill(this.Tcolor);
+    noStroke();
+    rect(this.x, this.y, 275, 150);
+   fill(255, 191, 0);
+   text(this.message, this.x+30, this.y+75);
+fill(255, 191, 0);
+    noStroke();
+   
+    ellipse(this.x+50, this.y+150, 75, 75);
+    ellipse(this.x+150, this.y+150, 75, 75);
+    ellipse(this.x+250, this.y+150, 75, 75);
+    
+     fill(69, 67, 63);
+    
+    ellipse(this.x+50, this.y+150, 70, 70);
+    ellipse(this.x+150, this.y+150, 70, 70);
+    ellipse(this.x+250, this.y+150, 70, 70);
+    fill(50, 50, 50);
+    rect(this.x-95, this.y, 150, 25,25);
+    
+
+};
+caboose.prototype.move = function(){
+    this.x = this.x+this.speed;
+    if(this.x > 4000){
+    this.x = -1000;
+}
+
+};
+var car1 = new frontTrainCar(700-800, 282, 5, 250, 5);
+var trainCar1 = new trainCar(35-800, 134,5 , "We", color(13, 99, 7));
+var trainCar2 = new trainCar(-275-800, 134,5 , "wish", color(252, 0, 0));
+var trainCar3 = new trainCar(-275-315-800, 134,5 , "you", color(13, 99, 7));
+var trainCar4 = new trainCar(-275-315-315-800, 134,5 , "    a", color(252, 0, 0));
+var trainCar5 = new trainCar(-275-315-315-315-800, 134,5 , " merry", color(13, 99, 7));
+var trainCar6 = new caboose(-275-315-315-315-315-800, 134, 5, "Christmas!", color(255, 0, 0));
+
+//Draw function
+draw = function() {
+    background(218, 243, 250);
+    noStroke();
+    fill(250, 250, 250);
+    rect(0, 100, 600, 300);
+    tracks();
+    snowman();
+    
+  
+    car1.draw();
+    trainCar1.draw();
+    trainCar2.draw();
+    trainCar3.draw();
+    trainCar4.draw();
+    trainCar5.draw();
+    trainCar6.draw();
+    
+    car1.move();
+    trainCar1.move();
+    trainCar2.move();
+    trainCar3.move();
+    trainCar4.move();
+    trainCar5.move();
+    trainCar6.move();
+    
+    
+    // snow
+    for (var i = 0; i < xPositions.length; i++) {
+            noStroke();
+            fill(255, 255, 255);
+            ellipse(xPositions[i], yPositions[i], 10, 10);
+         
+                yPositions[i] += 2;
+            
+            if(yPositions[i] > 400){
+                yPositions[i] = 0;
+            }
+        }
+        
+        if(y > 400){y = 20;}
+        y++;
+};
+
+
+
+        }
+        if (typeof draw !== 'undefined') processing.draw = draw;
+    });
+  </script>
+</body>
+</html>

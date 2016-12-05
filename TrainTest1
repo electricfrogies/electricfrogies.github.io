@@ -132,7 +132,7 @@ trainCar.prototype.move = function(){
 frontTrainCar.prototype.draw = function() {
     rectMode(CENTER);
     fill(48, 48, 48);
-    arc(this.x, this.y, 250, 261, -179, 0);
+
     rect(this.x-197, this.y-75, 332, 149);
     fill(89, 89, 89);
     rect(this.x, this.y-169, 20, 80);

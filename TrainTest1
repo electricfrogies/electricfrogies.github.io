@@ -9,8 +9,8 @@
   <script>
     var canvas = document.getElementById("canvas");
     var processing = new Processing(canvas, function(processing) {
-        processing.size(400, 400);
-        processing.background(0xFFF);
+        processing.size(600, 400);
+        processing.background(0xFF4);
 
         var mouseIsPressed = false;
         processing.mousePressed = function () { mouseIsPressed = true; };

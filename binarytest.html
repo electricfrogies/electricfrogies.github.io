@@ -1,68 +1,184 @@
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Live Editor Simple Demo</title>
-    <link rel="stylesheet" href="../../build/css/live-editor.core_deps.css"/>
-    <link rel="stylesheet" href="../../build/css/live-editor.audio.css"/>
-    <link rel="stylesheet" href="../../build/css/live-editor.tooltips.css"/>
-    <link rel="stylesheet" href="../../build/css/live-editor.ui.css"/>
-    <link rel="stylesheet" href="../../build/css/live-editor.debugger.css"/>
-    <style>
-        body {
-            padding: 20px;
-        }
-
-        h1 {
-            padding: 0;
-            margin: 0 0 20px 0;
-        }
-        #sample-live-editor {
-            padding: 0;
-        }
-    </style>
+<!DOCTYPE html>
+<!-- This is based on DillingerLee's great template here:
+https://github.com/Team-Code/KA_Offline -->
+<html> 
+ <head>
+    <title>Processing.JS inside Webpages: Template</title> 
 </head>
-<body>
-    <h1>Live Editor Example</h1>
-    <div id="sample-live-editor"></div>
+ <body>
+    <p align="center"> 
+	<!--This draws the Canvas on the webpage -->
+      <canvas id="mycanvas"></canvas> 
+    </p>
+ </body>
+ 
+ <!-- Run all the JavaScript stuff -->
+ <!-- Include the processing.js library -->
+ <!-- See https://khanacademy.zendesk.com/hc/en-us/articles/202260404-What-parts-of-ProcessingJS-does-Khan-Academy-support- for differences -->
+ <script src="https://cdn.jsdelivr.net/processing.js/1.4.8/processing.min.js"></script> 
+ 
+ <script>
+    var sketchProc = function(processingInstance) {
+     with (processingInstance) {
+        size(400, 400); 
+        frameRate(30);
+        
+        // ProgramCodeGoesHere
+        var dec = floor(random(0,255));
+var minus= 0;
 
-    <script src="../../build/js/live-editor.core_deps.js"></script>
-    <script src="../../build/js/live-editor.editor_ace_deps.js"></script>
-    <script src="../../build/js/live-editor.audio.js"></script>
-    <script src="../../build/js/live-editor.shared.js"></script>
-    <script src="../../build/js/live-editor.tooltips.js"></script>
-    <script src="../../build/js/live-editor.ui.js"></script>
-    <script src="../../build/js/live-editor.editor_ace.js"></script>
-    <!--<script src="../../build/js/live-editor.debugger.js"></script>-->
 
-    <script>
-    var outputUrl = "output.html";
-    var useDebugger = false;
-    // TODO(kevinb7) conditionally load live-editor.debugger.js
-//    if (location.search.indexOf("debugger=true") !== -1) {
-//        outputUrl += "?debugger=true";
-//        useDebugger = true;
-//    }
 
-    window.liveEditor = new LiveEditor({
-        el: $("#sample-live-editor"),
-        code: window.localStorage["test-code"] || "rect(10, 10, 100, 100);",
-        width: 400,
-        height: 400,
-        editorHeight: "80%",
-        autoFocus: true,
-        workersDir: "../../build/workers/",
-        externalsDir: "../../build/external/",
-        imagesDir: "../../build/images/",
-        soundsDir: "../../sounds/",
-        execFile: outputUrl,
-        jshintFile: "../../build/external/jshint/jshint.js",
-        useDebugger: useDebugger
-    });
-    liveEditor.editor.on("change", function() {
-        window.localStorage["test-code"] = liveEditor.editor.text();
-    });
-    ScratchpadAutosuggest.init(liveEditor.editor.editor);
-    </script>
-</body>
+
+var light= function(x,y,color,text){
+    this.x=x;
+    this.y=y;
+    this.color=color;
+    this.text=text;
+    
+};
+
+light.prototype.draw= function() {
+    
+    fill(this.color);
+    ellipse(this.x,this.y,40,40);
+    textSize(10);
+    fill(0,0,0);
+    text(this.text,this.x+-8,this.y+4);
+    textSize(15);
+    if(this.color===color(255,0,0)){
+        text(1,this.x,this.y+53);
+    }
+    else{
+        text(0,this.x,this.y+53);
+    }
+};
+
+var light1 = new light(30,200,color(255,255,255),128);
+var light2 = new light(77,200,color(255,255,255),64);
+var light3 = new light(123,200,color(255,255,255),32);
+var light4 = new light(166,200,color(255,255,255),16);
+var light5 = new light(208,200,color(255,255,255),8);
+var light6 = new light(252,200,color(255,255,255),4);
+var light7 = new light(300,200,color(255,255,255),2);
+var light8 = new light(355,200,color(255,255,255),1);
+
+
+    if(dec % 2 === 1){
+        light8.color = color(255, 0, 0);
+        minus += 1;
+        
+        
+    }
+    else{
+        light8.color = color(255, 255, 255);
+        
+    }
+    
+    if((dec-minus) % 4 === 2){
+       light7.color = color(255,0 , 0);
+        minus += 2;
+        
+        
+    }
+    else{
+        light7.color = color(255, 255, 255);
+        
+    }
+     if((dec-minus) % 8 === 4){
+       light6.color = color(255, 0,0);
+        minus += 4;
+        
+    }
+    else{
+        light6.color = color(255, 255, 255);
+    }
+    if((dec-minus) % 16 === 8){
+       light5.color = color(255,0, 0 );
+        minus += 8;
+        
+    }
+    else{
+        light5.color = color(255, 255, 255);
+    }
+     if((dec-minus) % 32 === 16){
+       light4.color = color(255, 0, 0);
+        minus += 16;
+        
+    }
+    else{
+        light4.color = color(255, 255, 255);
+    }
+    if((dec-minus) % 64 === 32){
+       light3.color = color(255, 0, 0);
+        minus += 32;
+        
+    }
+    else{
+        light3.color = color(255, 255, 255);
+    }
+    if((dec-minus) % 128 === 64){
+       light2.color = color(255, 0, 0);
+        minus += 64;
+        
+    }
+    else{
+        light2.color = color(255, 255,255);
+    }
+     if((dec-minus) % 256 === 128){
+       light1.color = color(255,0, 0);
+        minus += 128;
+        
+    }
+    else{
+        light1.color = color(255, 255, 255);
+    }
+
+
+
+
+var draw= function() {
+    background(0,255, 255);
+    fill(255,255,255);
+    noStroke();
+    fill(77, 36, 0);
+    triangle(0,104,400,104,200,0);
+    stroke(0,0,0);
+    strokeWeight(4);
+    line(0,104,400,104);
+    rect(0,104,400,196);
+    fill(0, 255, 0);
+    rect(0,300,400,100);
+    fill(255,255,255);
+    rect(11,226,50-10,50-10);
+    rect(57,226,50-10,50-10);
+    rect(104,226,50-10,50-10);
+    rect(150,226,50-10,50-10);
+    rect(195,226,50-10,50-10);
+    rect(238,226,50-10,50-10);
+    rect(284,226,50-10,50-10);
+    rect(333,226,50-10,50-10);
+    noStroke();
+    light1.draw();
+    light2.draw();
+    light3.draw();
+    light4.draw();
+    light5.draw();
+    light6.draw();
+    light7.draw();
+    light8.draw();
+    textSize(17);
+    fill(255,255,255);
+    text("Decimal Number: "+dec,20,175);
+    fill(255, 0, 0);
+    
+
+};
+
+    // Get the canvas that Processing-js will use
+    var canvas = document.getElementById("mycanvas"); 
+    // Pass the function sketchProc (defined in myCode.js) to Processing's constructor.
+    var processingInstance = new Processing(canvas, sketchProc); 
+ </script>
+
 </html>
-

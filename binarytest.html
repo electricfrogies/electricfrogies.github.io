@@ -26,9 +26,7 @@ https://github.com/Team-Code/KA_Offline -->
         // ProgramCodeGoesHere
         var dec = floor(random(0,255));
 var minus= 0;
-
-
-
+var start = millis();
 
 var light= function(x,y,color,text){
     this.x=x;
@@ -37,7 +35,6 @@ var light= function(x,y,color,text){
     this.text=text;
     
 };
-
 light.prototype.draw= function() {
     
     fill(this.color);
@@ -134,7 +131,10 @@ var light8 = new light(355,200,color(255,255,255),1);
         light1.color = color(255, 255, 255);
     }
 
-
+mouseClicked = function() {
+    // Restart the program whenever the user clicks the mouse
+    Program.restart();
+};
 
 
 var draw= function() {
@@ -171,7 +171,7 @@ var draw= function() {
     fill(255,255,255);
     text("Decimal Number: "+dec,20,175);
     fill(255, 0, 0);
-	};     
+};
     }};
 
     // Get the canvas that Processing-js will use

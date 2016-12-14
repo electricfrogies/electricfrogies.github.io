@@ -1,41 +1,29 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <title>JavaScript</title>
-  <script src="http://cdnjs.cloudflare.com/ajax/libs/processing.js/1.4.8/processing.min.js"></script>
+<!-- This is based on DillingerLee's great template here:
+https://github.com/Team-Code/KA_Offline -->
+<html> 
+ <head>
+    <title>Processing.JS inside Webpages: Template</title> 
 </head>
-<body>
-  <canvas id="canvas"></canvas>
-  <script>
-    var canvas = document.getElementById("canvas");
-    var processing = new Processing(canvas, function(processing) {
-        processing.size(600, 400);
-        processing.background(0xFF4);
-
-        var mouseIsPressed = false;
-        processing.mousePressed = function () { mouseIsPressed = true; };
-        processing.mouseReleased = function () { mouseIsPressed = false; };
-
-        var keyIsPressed = false;
-        processing.keyPressed = function () { keyIsPressed = true; };
-        processing.keyReleased = function () { keyIsPressed = false; };
-
-        function getImage(s) {
-            var url = "https://www.kasandbox.org/programming-images/" + s + ".png";
-            processing.externals.sketch.imageCache.add(url);
-            return processing.loadImage(url);
-        }
-
-        // use degrees rather than radians in rotate function
-        var rotateFn = processing.rotate;
-        processing.rotate = function (angle) {
-            rotateFn(processing.radians(angle));
-        };
-
-        with (processing) {
-
-
-            // INSERT YOUR KHAN ACADEMY PROGRAM HERE
+ <body>
+    <p align="center"> 
+	<!--This draws the Canvas on the webpage -->
+      <canvas id="mycanvas"></canvas> 
+    </p>
+ </body>
+ 
+ <!-- Run all the JavaScript stuff -->
+ <!-- Include the processing.js library -->
+ <!-- See https://khanacademy.zendesk.com/hc/en-us/articles/202260404-What-parts-of-ProcessingJS-does-Khan-Academy-support- for differences -->
+ <script src="https://cdn.jsdelivr.net/processing.js/1.4.8/processing.min.js"></script> 
+ 
+ <script>
+    var sketchProc = function(processingInstance) {
+     with (processingInstance) {
+        size(400, 400); 
+        frameRate(30);
+        
+        // ProgramCodeGoesHere
 var y = 10;
 //Snow array
 var xPositions = [200, 225, 125, 375, 150, 280, 317, 350, 50, 55, 225, 250, 150, 100, 123, 210, 111, 222, 333, 141, 22, 132, 281, 569, 284, 600, 500, 520, 400, 580, 540, 440, 421, 452];
@@ -132,7 +120,7 @@ trainCar.prototype.move = function(){
 frontTrainCar.prototype.draw = function() {
     rectMode(CENTER);
     fill(48, 48, 48);
-
+    arc(this.x, this.y, 250, 261, -179, 0);
     rect(this.x-197, this.y-75, 332, 149);
     fill(89, 89, 89);
     rect(this.x, this.y-169, 20, 80);
@@ -265,10 +253,12 @@ draw = function() {
 };
 
 
+    }};
 
-        }
-        if (typeof draw !== 'undefined') processing.draw = draw;
-    });
-  </script>
-</body>
+    // Get the canvas that Processing-js will use
+    var canvas = document.getElementById("mycanvas"); 
+    // Pass the function sketchProc (defined in myCode.js) to Processing's constructor.
+    var processingInstance = new Processing(canvas, sketchProc); 
+ </script>
+
 </html>

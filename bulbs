@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<!-- This is based on DillingerLee's great template here:
+https://github.com/Team-Code/KA_Offline -->
+<html> 
+ <head>
+    <title>Processing.JS inside Webpages: Template</title> 
+</head>
+ <body>
+    <p align="center"> 
+	<!--This draws the Canvas on the webpage -->
+      <canvas id="mycanvas"></canvas> 
+    </p>
+ </body>
+ 
+ <!-- Run all the JavaScript stuff -->
+ <!-- Include the processing.js library -->
+ <!-- See https://khanacademy.zendesk.com/hc/en-us/articles/202260404-What-parts-of-ProcessingJS-does-Khan-Academy-support- for differences -->
+ <script src="https://cdn.jsdelivr.net/processing.js/1.4.8/processing.min.js"></script> 
+ 
+ <script>
+    var sketchProc = function(processingInstance) {
+     with (processingInstance) {
+        size(400, 400); 
+        frameRate(30);
+        
+        // ProgramCodeGoesHere
+        var output = "";
+var dec = floor(random(0, 255));
+var minus = 0;
+
+var textX = 211; 
+var light = function(x,y, color, tex){
+    this.color = color;
+    this.x =x;
+    this.y = y;
+    this.tex = tex;
+};
+
+light.prototype.draw = function() {
+    fill(this.color);
+    line(this.x, this.y-20, this.x+45, this.y-14);
+    ellipse(this.x, this.y, 20, 40);
+    textSize(20);
+    text(1, this.x, this.y+50);
+    if(this.color === color(255, 255, 255)){
+    fill(255, 0, 0);
+    text(0, this.x, this.y+50);
+    }
+    fill(255, 0, 0);
+    text(this.tex, this.x-10, this.y-25);
+};
+
+var light1 = new light(10, 135, color(255, 255, 255), "128");
+var light2 = new light(60, 135, color(255, 255, 255), "64");
+
+var light3 = new light(100, 135, color(255, 255, 255), 32);
+var light4 = new light(150, 135, color(255, 255, 255), 16);
+var light5 = new light(190, 135, color(255, 255, 255), 8);
+var light6 = new light(230, 135, color(255, 255, 255), 4);
+var light7 = new light(270, 135, color(255, 255, 255), 2);
+var light8 = new light(320, 135, color(255, 255, 255), 1);
+
+//rect(140, 100, 100, 50);
+/*mouseClicked = function(){
+if(mouseX > 140 && mouseX < 240 && mouseY > 100 && mouseY < 150){
+    decimal++;
+    if(decimal === 256){
+        decimal = 255;
+    }
+    if(decimal=== 10){
+       textX-=50; 
+    }
+
+
+}
+if(mouseX > 140 && mouseX < 240 && mouseY > 300 && mouseY < 350){
+decimal--;
+    if(decimal === -1){
+        decimal = 0;
+    }
+         if(decimal === 9){
+       textX+=50; 
+    }
+}
+};*/
+
+ if(dec % 2 === 1){
+        light8.color = color(255, 0, 0);
+        minus += 1;
+        
+        
+    }
+    else{
+        light8.color = color(255, 255, 255);
+        
+    }
+    
+    if((dec-minus) % 4 === 2){
+       light7.color = color(255,0 , 0);
+        minus += 2;
+        
+        
+    }
+    else{
+        light7.color = color(255, 255, 255);
+        
+    }
+     if((dec-minus) % 8 === 4){
+       light6.color = color(255, 0,0);
+        minus += 4;
+        
+    }
+    else{
+        light6.color = color(255, 255, 255);
+    }
+    if((dec-minus) % 16 === 8){
+       light5.color = color(255,0, 0 );
+        minus += 8;
+        
+    }
+    else{
+        light5.color = color(255, 255, 255);
+    }
+     if((dec-minus) % 32 === 16){
+       light4.color = color(255, 0, 0);
+        minus += 16;
+        
+    }
+    else{
+        light4.color = color(255, 255, 255);
+    }
+    if((dec-minus) % 64 === 32){
+       light3.color = color(255, 0, 0);
+        minus += 32;
+        
+    }
+    else{
+        light3.color = color(255, 255, 255);
+    }
+    if((dec-minus) % 128 === 64){
+       light2.color = color(255, 0, 0);
+        minus += 64;
+        
+    }
+    else{
+        light2.color = color(255, 255,255);
+    }
+     if((dec-minus) % 256 === 128){
+       light1.color = color(255,0, 0);
+        minus += 128;
+        
+    }
+    else{
+        light1.color = color(255, 255, 255);
+    }
+
+
+var house = function(){
+for(var i = 0; i< 420; i+=40){
+    for(var y = 75; y< 400-25; y+=40){
+    fill(140, 140, 140);
+    rect(i-15,y+20, 40, 20);
+    rect(i,y, 40, 20);
+}}
+fill(217, 217, 217);
+triangle(-50, 115, 450, 115, 200, -50);
+
+fill(255, 255, 255);
+stroke(0, 0, 0);
+rect(155, 260, 80, 155);
+rect(145, 250, 100, 175);
+fill(247, 247, 247);
+rect(155, 260, 80, 60);
+rect(155, 332, 80, 60);
+fill(255, 255, 255);
+rect(160, 265, 70, 50);
+rect(160, 337, 70, 50);
+fill(112, 112, 112);
+ellipse(228, 326, 20, 20);
+};
+
+draw = function() {
+    background(255, 255, 255);
+house();
+light1.draw();
+light2.draw();
+light3.draw();
+light4.draw();
+light5.draw();
+light6.draw();
+light7.draw();
+light8.draw();
+line(320+45, 121, 495, 50);
+
+fill(255, 230, 0);
+textSize(40);
+text(dec, textX+42, 289);
+
+
+};
+
+    }};
+
+    // Get the canvas that Processing-js will use
+    var canvas = document.getElementById("mycanvas"); 
+    // Pass the function sketchProc (defined in myCode.js) to Processing's constructor.
+    var processingInstance = new Processing(canvas, sketchProc); 
+ </script>
+
+</html>
